@@ -7,8 +7,8 @@ st.title("🌍 Language Translation Tool")
 
 # User input
 text = st.text_area("Enter text to translate:")
-source_lang = st.text_input("Source language (e.g., 'en' for English):", "en")
-target_lang = st.text_input("Target language (e.g., 'fr' for French):", "fr")
+source_lang = st.text_input("Source language (e.g., 'English' for English):", "English")
+target_lang = st.text_input("Target language (e.g., 'Rrench' for French):", "French")
 
 if st.button("Translate"):
     try:
@@ -23,3 +23,4 @@ if st.button("Translate"):
 
     except Exception as e:
         st.error(f"Error: {str(e)}")
+
