@@ -1,37 +1,25 @@
 import streamlit as st
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 from gtts import gTTS
 import os
 
-# Streamlit UI
-st.title("🌍 CodeAlpha Translation Tool")
-st.write("Translate text into different languages and listen to the audio!")
+st.title("🌍 Language Translation Tool")
 
-# Input text
+# User input
 text = st.text_area("Enter text to translate:")
+source_lang = st.text_input("Source language (e.g., 'en' for English):", "en")
+target_lang = st.text_input("Target language (e.g., 'fr' for French):", "fr")
 
-# Select target language
-languages = {
-    "English": "en",
-    "French": "fr",
-    "German": "de",
-    "Spanish": "es",
-    "Hindi": "hi",
-    "Telugu": "te"
-}
-lang_choice = st.selectbox("Select language:", list(languages.keys()))
-
-# Translate
 if st.button("Translate"):
-    if text.strip() != "":
-        translator = Translator()
-        translated = translator.translate(text, dest=languages[lang_choice])
-        st.success(f"**Translated ({lang_choice}):** {translated.text}")
+    try:
+        translated = GoogleTranslator(source=source_lang, target=target_lang).translate(text)
+        st.success(f"**Translated Text:** {translated}")
 
-        # Text-to-Speech
-        tts = gTTS(translated.text, lang=languages[lang_choice])
-        tts.save("translated_audio.mp3")
-        audio_file = open("translated_audio.mp3", "rb")
+        # Optional: Convert to speech
+        tts = gTTS(translated, lang=target_lang)
+        tts.save("output.mp3")
+        audio_file = open("output.mp3", "rb")
         st.audio(audio_file.read(), format="audio/mp3")
-    else:
-        st.warning("⚠️ Please enter some text.")
+
+    except Exception as e:
+        st.error(f"Error: {str(e)}")
